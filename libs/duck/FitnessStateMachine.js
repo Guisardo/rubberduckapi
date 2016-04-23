@@ -8,7 +8,12 @@ window.duck = window.duck || {};
  * @constructor
  */
 duck.FitnessStateMachine = function() {
-  this.answer = null;
+  this.history = {
+    'firstQuestionAt': null,
+    'lastAnswerAt': null,
+    'questions': [],
+    'answers': []
+  };
   this.visited_states = [];
   this.current_state = false;
   this.what_it_does = null;
@@ -35,14 +40,34 @@ duck.MachineAnswerTypes = function(code) {
  * Machine state output interface
  * @param {string} next_question Next question
  * @param {MachineAnswerTypes} answer_type   Type of question
- * @param {Array} options       Question options if any
+ * @param {function} options       Question options if any
  * @return {Object} Machine state filled
  */
 duck.MachineState = function(next_question, answer_type, options) {
+  options = options || function() {};
   return {
     'next_question': next_question,
     'answer_type': answer_type,
-    'options': options
+    'options': options()
+  };
+};
+
+/**
+ * Build the report of the dialog
+ * @return {Object} Dialog information
+ */
+duck.FitnessStateMachine.prototype.getReport = function() {
+  var _QA = [];
+  for (var i = 0; i < this.history.questions.length; i++) {
+    _QA.push('Q:' + this.history.questions[i]);
+    if (this.history.answers.length > i) {
+      _QA.push('A:' + this.history.answers[i]);
+    }
+  }
+  return {
+    'startTime': this.history.firstQuestionAt,
+    'lastTime': this.history.lastAnswerAt,
+    'dialog': _QA
   };
 };
 
@@ -58,10 +83,13 @@ duck.FitnessStateMachine.prototype.getNext = function(answer) {
         ' Have you tried google or stack overflow?',
     'reset'
   );
-  this.answer = answer;
-  _ref = this.listStates();
-  if (this.current_state) {
+  _ref = this.listStates(answer);
+  if (this.current_state !== false) {
+    this.history.answers.push(answer);
+    this.history.lastAnswerAt = new Date();
     _ref[this.current_state].post_action();
+  } else {
+    this.history.firstQuestionAt = new Date();
   }
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     state = _ref[_i];
@@ -77,14 +105,16 @@ duck.FitnessStateMachine.prototype.getNext = function(answer) {
       break;
     }
   }
+  this.history.questions.push(out.next_question);
   return out;
 };
 
 /**
  * List all posible states
+ * @param {string} answer Last answer
  * @return {Array} List of states
  */
-duck.FitnessStateMachine.prototype.listStates = function() {
+duck.FitnessStateMachine.prototype.listStates = function(answer) {
   var _that = this;
   return [
     {
@@ -94,7 +124,7 @@ duck.FitnessStateMachine.prototype.listStates = function() {
       'pre_action': function() {},
       'post_action': function() {
         var pattern;
-        pattern = new duck.PatternMatcher(_that.answer);
+        pattern = new duck.PatternMatcher(answer);
         return _that.potential_nouns = pattern.toLikelyNouns();
       },
       'question': function() {
@@ -114,7 +144,7 @@ duck.FitnessStateMachine.prototype.listStates = function() {
         return _that.noun = _that.potential_nouns[0];
       },
       'post_action': function() {
-        if (_that.answer === 'no') {
+        if (answer === 'no') {
           return _that.noun = null;
         }
       },
@@ -136,7 +166,7 @@ duck.FitnessStateMachine.prototype.listStates = function() {
       },
       'pre_action': function() {},
       'post_action': function() {
-        _that.noun = _that.answer;
+        _that.noun = answer;
         if (_that.noun === 'none of the above') {
           return _that.noun = null;
         }
@@ -156,8 +186,8 @@ duck.FitnessStateMachine.prototype.listStates = function() {
       },
       'pre_action': function() {},
       'post_action': function() {
-        if (_that.answer && _that.answer.trim() !== '') {
-          return _that.noun = _that.answer;
+        if (answer && answer.trim() !== '') {
+          return _that.noun = answer;
         }
       },
       'question': function() {
@@ -175,7 +205,7 @@ duck.FitnessStateMachine.prototype.listStates = function() {
       },
       'pre_action': function() {},
       'post_action': function() {
-        return _that.what_it_does = _that.answer;
+        return _that.what_it_does = answer;
       },
       'question': function() {
         return 'Can you explain what ' + _that.noun + ' does?';
@@ -328,7 +358,7 @@ duck.FitnessStateMachine.prototype.listStates = function() {
       },
       'pre_action': function() {},
       'post_action': function() {
-        return _that.what_it_does = _that.answer;
+        return _that.what_it_does = answer;
       },
       'question': function() {
         return 'Why do you need ' + _that.noun + '?';
