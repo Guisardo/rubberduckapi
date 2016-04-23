@@ -19,6 +19,13 @@ duck.FitnessStateMachine = function() {
   this.what_it_does = null;
   this.potential_nouns = [];
   this.noun = null;
+
+  //re-initialize from parameter
+  if (arguments[0]) {
+    for (var prop in arguments[0]) {
+      this[prop] = arguments[0][prop];
+    }
+  }
 };
 
 /**
