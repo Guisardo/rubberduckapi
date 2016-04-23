@@ -15,6 +15,7 @@
       'questions': [],
       'answers': []
     };
+    this.last_question = null;
     this.visited_states = [];
     this.current_state = false;
     this.what_it_does = null;
@@ -52,7 +53,7 @@
    * @return {Object} Machine state filled
    */
   duck.MachineState = function(next_question, answer_type, options) {
-    options = options || function() {};
+    options = options || function() { return null; };
     return {
       'next_question': next_question,
       'answer_type': answer_type,
@@ -91,29 +92,34 @@
           ' Have you tried google or stack overflow?',
       'reset'
     );
-    _ref = this.listStates(answer);
-    if (this.current_state !== false) {
-      this.history.answers.push(answer);
-      this.history.lastAnswerAt = new Date();
-      _ref[this.current_state].post_action();
+    if (this.current_state !== false && (!answer || answer === '')) {
+      out = this.last_question;
     } else {
-      this.history.firstQuestionAt = new Date();
-    }
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      state = _ref[_i];
-      if (state.qualifies()) {
-        this.current_state = _i;
-        this.visited_states.push(state.name);
-        state.pre_action();
-        out = duck.MachineState(
-          state.question(),
-          state.answer_type,
-          state.options
-        );
-        break;
+      _ref = this.listStates(answer);
+      if (this.current_state !== false) {
+        this.history.answers.push(answer);
+        this.history.lastAnswerAt = new Date();
+        _ref[this.current_state].post_action();
+      } else {
+        this.history.firstQuestionAt = new Date();
       }
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        state = _ref[_i];
+        if (state.qualifies()) {
+          this.current_state = _i;
+          this.visited_states.push(state.name);
+          state.pre_action();
+          out = duck.MachineState(
+            state.question(),
+            state.answer_type,
+            state.options
+          );
+          break;
+        }
+      }
+      this.history.questions.push(out.next_question);
+      this.last_question = out;
     }
-    this.history.questions.push(out.next_question);
     return out;
   };
 

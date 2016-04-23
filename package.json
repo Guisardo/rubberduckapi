@@ -15,7 +15,7 @@
     "url": "https://github.com/Guisardo/rubberduckbot/issues"
   },
   "homepage": "https://github.com/Guisardo/rubberduckbot#readme",
-  "main": "libs/server/index.js",
+  "main": "server.js",
   "devDependencies": {
     "express": "^4.13.4",
     "mongoose": "^4.4.13"
