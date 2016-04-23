@@ -1,5 +1,5 @@
 var port = process.env.PORT || 8010;
-var mongohost = process.env.MONGO_HOST || '146.20.68.249';
+var mongohost = process.env.MONGO_HOST || 'mongodb';
 var mongoport = process.env.MONGO_PORT || '27017';
 
 var express = require('express');
