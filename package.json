@@ -1,0 +1,19 @@
+{
+  "name": "rubberduckbot",
+  "version": "1.0.0",
+  "description": "Rubber Duck debugger service.",
+    "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Guisardo/rubberduckbot.git"
+  },
+  "author": "Guisardo",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Guisardo/rubberduckbot/issues"
+  },
+  "homepage": "https://github.com/Guisardo/rubberduckbot#readme",
+  "main": "index.js"
+}
