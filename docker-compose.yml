@@ -1,0 +1,11 @@
+data:
+    image: mongo
+    restart: always
+
+core:
+    build: .
+    links:
+     - "data:mongodb"
+    restart: always
+    ports:
+     - "80:80"
