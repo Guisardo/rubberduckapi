@@ -22,44 +22,46 @@ eval(fs.readFileSync('./libs/duck/PatternMatcher.js') + '');
 eval(fs.readFileSync('./libs/duck/FitnessStateMachine.js') + '');
 
 app.use('/dialog', function(req, res) {
-    var query = req.query;
-    var duck_id = query.duck_id;
-    var answer = query.answer;
+  var query = req.query;
+  var duck_id = query.duck_id;
+  var answer = query.answer;
 
-    Duck.findOne({'duck_id': duck_id}, 'duck_id data', function(err, duckDB) {
-        var duckData = {};
-        if (duckDB) {
-            if (answer !== 'reset') {
-                duckData = duckDB.data;
-            }
-        } else {
-            duckDB = new Duck();
-            duckDB.duck_id = duck_id;
-        }
-        var duckie = new duck.FitnessStateMachine(duckData);
-        var nextState = duckie.getNext(answer);
-        duckDB.data = duckie;
-        duckDB.save();
-        res.send(nextState);
-    });
+  Duck.findOne({'duck_id': duck_id}, 'duck_id data', function(err, duckDB) {
+    var duckData = {};
+    if (duckDB) {
+      if (answer !== 'reset') {
+          duckData = duckDB.data;
+      }
+    } else {
+      duckDB = new Duck();
+      duckDB.duck_id = duck_id;
+    }
+    var duckie = new duck.FitnessStateMachine(duckData);
+    var nextState = duckie.getNext(answer);
+    duckDB.data = duckie;
+    duckDB.save();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(nextState);
+  });
 });
 
 app.use('/fulldialog', function(req, res) {
-    var query = req.query;
-    var duck_id = query.duck_id;
+  var query = req.query;
+  var duck_id = query.duck_id;
 
-    Duck.findOne({'duck_id': duck_id}, 'duck_id data', function(err, duckDB) {
-        var duckData = {};
-        if (duckDB) {
-            duckData = duckDB.data;
-        } else {
-            duckDB = new Duck();
-            duckDB.duck_id = duck_id;
-        }
-        var duckie = new duck.FitnessStateMachine(duckData);
-        var report = duckie.getReport();
-        res.send(report);
-    });
+  Duck.findOne({'duck_id': duck_id}, 'duck_id data', function(err, duckDB) {
+    var duckData = {};
+    if (duckDB) {
+      duckData = duckDB.data;
+    } else {
+      duckDB = new Duck();
+      duckDB.duck_id = duck_id;
+    }
+    var duckie = new duck.FitnessStateMachine(duckData);
+    var report = duckie.getReport();
+    res.setHeader('Content-Type', 'application/json');
+    res.send(report);
+  });
 });
 
 app.listen(port);
