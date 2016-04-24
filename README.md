@@ -14,7 +14,7 @@ ___
 | field | type | description |
 | --- | --- | --- |
 | next_question | string | Duck question for the user.
-| answer_type | number | It could be one this:
+| answer_type | number | It could be one of this:
 | | | 3: Then next answer is probably going to be a long one.
 | | | 2: Then next answer is probably going to be a short one.
 | | | 1: The duck has provided some options for the next answer.
