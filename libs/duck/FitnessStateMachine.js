@@ -74,8 +74,8 @@
       }
     }
     return {
-      'startTime': this.history.firstQuestionAt,
-      'lastTime': this.history.lastAnswerAt,
+      'start_time': this.history.firstQuestionAt,
+      'last_time': this.history.lastAnswerAt,
       'dialog': _QA
     };
   };
