@@ -1,6 +1,7 @@
 var port = process.env.PORT || 8010;
 var mongohost = process.env.MONGO_HOST || 'mongodb';
 var mongoport = process.env.MONGO_PORT || '27017';
+var mongodbname = process.env.MONGO_DB || 'skein';
 
 var express = require('express');
 
@@ -10,7 +11,8 @@ var mongoose = require('mongoose'),
 
 var app = express();
 
-mongoose.connect('mongodb://' + mongohost + ':' + mongoport + '/skein');
+mongoose.connect('mongodb://' + mongohost + ':' + mongoport + '/' +
+    mongodbname);
 var duckieSchema = new Schema({
   duck_id: { type: String, default: '-' },
   data: { type: Object }
