@@ -8,7 +8,7 @@ ___
 | duck_id | string | Unique identifier for the duck session.
 | answer | string | *(optional)* User answer to the last duck question. There are some special commands:
 | | |  - reset: Starts all over. Clears the dialog history.
-| | |  - *empty*: Repeats the las question.
+| | |  - *empty*: Repeat the las question.
 
 #### response
 | field | type | description |
