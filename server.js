@@ -32,7 +32,7 @@ app.use('/dialog', function(req, res) {
     var duckData = {};
     if (duckDB) {
       if (answer !== 'reset') {
-          duckData = duckDB.data;
+        duckData = duckDB.data;
       }
     } else {
       duckDB = new Duck();
