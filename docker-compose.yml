@@ -3,7 +3,7 @@ data:
     restart: always
 
 core:
-    build: .
+    image: lucardo/rubberduckbot
     links:
      - "data:mongodb"
     restart: always
