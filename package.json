@@ -17,7 +17,10 @@
   "homepage": "https://github.com/Guisardo/rubberduckbot#readme",
   "main": "server.js",
   "devDependencies": {
+  },
+  "dependencies": {
     "express": "^4.13.4",
-    "mongoose": "^4.4.13"
+    "mongoose": "^4.4.13",
+    "nodemailer": "^2.3.2"
   }
 }
