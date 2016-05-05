@@ -10,7 +10,7 @@ services:
      - maildata:/var/mail
     volumes:
      - ./config/:/tmp/docker-mailserver/
-     - ./opendkim/:/tmp/docker-mailserver/opendkim/
+     - ./config/opendkim/:/tmp/docker-mailserver/opendkim/
     environment:
       MAIL_USER: rubberduck@duckie.me
       MAIL_PASS: pass
