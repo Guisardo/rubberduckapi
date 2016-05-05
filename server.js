@@ -35,7 +35,7 @@ app.use('/dialog', function(req, res) {
   Duck.findOne({'duck_id': duck_id}, 'duck_id data', function(err, duckDB) {
     var duckData = {};
     if (duckDB) {
-      if (answer !== 'reset') {
+      if (answer !== 'reset' && answer !== 'report') {
         duckData = duckDB.data;
       }
     } else {
