@@ -81,7 +81,7 @@ app.use('/fulldialog', function(req, res) {
         var result = '<b> This conversation started at: ' +
             report.start_time + '</b><br>';
         result += 'And lasted ' +
-            Math.round((report.last_time - report.start_time) / 60) +
+            Math.round((report.last_time - report.start_time) / 60000) +
             ' minutes<hr>';
         for (var i = 0; i <= report.dialog.length - 1; i++) {
           result += report.dialog[i].replace(/Q:/, '✆ >').replace(/A:/, '☹ >') +
