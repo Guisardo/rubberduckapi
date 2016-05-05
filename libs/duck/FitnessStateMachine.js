@@ -90,7 +90,7 @@
     var out = duck.MachineState(
       'Sorry, my super-duck-powers have failed.' +
           ' Have you tried google or stack overflow?',
-      'reset'
+      duck.MachineAnswerTypes('reset')
     );
     if (this.current_state !== false && (!answer || answer === '')) {
       out = this.last_question;
